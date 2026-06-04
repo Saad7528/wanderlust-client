@@ -60,7 +60,7 @@ const Footer = () => {
             <h3 className="text-white mb-3 tracking-wide">CONTACT US</h3>
             <ul className="space-y-2">
               <li>+8801851192657</li>
-              <li>info@wandarland.com</li>
+              <li>Saad0174742@gmail.com</li>
             </ul>
           </div>
         </div>
