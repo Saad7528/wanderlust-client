@@ -2,6 +2,9 @@ import { Button, FieldError, Input, Label, ListBox, TextArea, TextField, Select,
 import React from 'react';
 
 const addDestinationPage = () => {
+    const onSubmit = (e) => {
+        e.preventDefault();
+    }
     return (
         <div className='max-w-7xl mx-auto'>
             <h1 className='text-3xl font-bold'>Add Destination</h1>
