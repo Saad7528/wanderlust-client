@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import { BiCheck } from 'react-icons/bi';
 import { FaStar } from 'react-icons/fa';
@@ -22,10 +23,12 @@ const destinationDetailsPage = async ({ params }) => {
 
                     {/* Header Section */}
                     <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-                        <button className="flex items-center text-gray-500 hover:text-gray-800 transition mb-4 sm:mb-0">
+                        <Link href='/destinations'>
+                        <button  className="flex items-center text-gray-500 hover:text-gray-800 transition mb-4 sm:mb-0">
                             <FiArrowLeft className="mr-2" />
                             <span>Back to Destinations</span>
                         </button>
+                        </Link>
 
                         <div className="flex items-center gap-3">
                             <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition">
@@ -57,7 +60,7 @@ const destinationDetailsPage = async ({ params }) => {
                             <div className="mb-8">
                                 <div className="flex items-center text-gray-500 text-sm mb-2">
                                     <FiMapPin className="mr-1" />
-                                    <span>Indonesia</span>
+                                    <span>{country}</span>
                                 </div>
                                 <h1 className="text-4xl font-light mb-4">{destinationName}</h1>
 
