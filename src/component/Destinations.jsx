@@ -6,7 +6,7 @@ import { HiOutlineLocationMarker, HiOutlineCalendar } from 'react-icons/hi';
 import { FiArrowUpRight } from 'react-icons/fi';
 
 const Destinations = ({ des }) => {
-    const { price, duration, country, destinationName, imageUrl } = des;
+    const { price, duration, country, destinationName, imageUrl, _id } = des;
     return (
         <div>
             <div className="card bg-base-100 w-full max-w-[380px] shadow-sm hover:shadow-md transition-shadow duration-300 rounded-none overflow-hidden font-sans">
@@ -55,7 +55,7 @@ const Destinations = ({ des }) => {
 
                     {/* Action Button */}
                     <div className="card-actions justify-start">
-                        <Link href="#" className="group flex items-center gap-1 text-[#38bdf8] font-semibold text-sm hover:text-[#0ea5e9] transition-colors uppercase tracking-wide">
+                        <Link href={`/destinations/${_id}`} className="group flex items-center gap-1 text-[#38bdf8] font-semibold text-sm hover:text-[#0ea5e9] transition-colors uppercase tracking-wide">
                             BOOK NOW
                             <FiArrowUpRight className="w-4 h-4 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform stroke-[2.5]" />
                         </Link>
