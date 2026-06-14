@@ -31,7 +31,7 @@ const destinationDetailsPage = async ({ params }) => {
                         </Link>
 
                         <div className="flex items-center gap-3">
-                            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition">
+                            <button  className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition">
                                 <FiEdit2 size={14} />
                                 <span className="text-sm font-medium">Edit</span>
                             </button>
