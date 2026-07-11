@@ -3,6 +3,7 @@ import React from 'react';
 import { BiCheck } from 'react-icons/bi';
 import { FaStar } from 'react-icons/fa';
 import { FiArrowLeft, FiArrowRight, FiCalendar, FiEdit2, FiMapPin, FiTrash2 } from 'react-icons/fi';
+import EditeModals from '@/component/EditeModals';
 
 const destinationDetailsPage = async ({ params }) => {
     const { id } = await params;
@@ -31,10 +32,7 @@ const destinationDetailsPage = async ({ params }) => {
                         </Link>
 
                         <div className="flex items-center gap-3">
-                            <button  className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition">
-                                <FiEdit2 size={14} />
-                                <span className="text-sm font-medium">Edit</span>
-                            </button>
+                            <EditeModals destination={destination} />
                             <button className="flex items-center gap-2 px-4 py-2 border border-red-200 text-red-500 rounded-md hover:bg-red-50 transition">
                                 <FiTrash2 size={14} />
                                 <span className="text-sm font-medium">Cancel</span>

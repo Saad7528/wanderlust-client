@@ -1,69 +1,92 @@
-import { Envelope } from "@gravity-ui/icons";
-import { Button, Input, Label, Modal, Surface, TextField } from "@heroui/react";
-import React from 'react';
+"use client";
+import React, { useState } from 'react';
+import { FiEdit2, FiMail } from "react-icons/fi";
+import { Button, FieldError, Input, Label, ListBox, Modal, Surface, TextField, Select, TextArea } from "@heroui/react";
+import { useRouter } from 'next/navigation';
 
-const EditeModals = () => {
+const EditeModals = ({ destination }) => {
+    const router = useRouter();
+    const [isOpen, setIsOpen] = useState(false);
+
+    const { _id, destinationName, country, category, price, duration, departureDate, imageUrl, description } = destination || {};
 
     const onSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        const destination = Object.fromEntries(formData.entries()); 
-        console.log(destination);
+        const updatedDestination = Object.fromEntries(formData.entries()); 
+        updatedDestination.price = Number(updatedDestination.price);
+        
+        try {
+            const res = await fetch(`http://localhost:5000/destination/${_id}`, {
+                method: 'PUT',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(updatedDestination)
+            });
+            const data = await res.json();
+            console.log(data);
+            if (res.ok) {
+                alert("Destination updated successfully!");
+                setIsOpen(false);
+                router.refresh();
+            } else {
+                alert("Failed to update destination.");
+            }
+        } catch (error) {
+            console.error("Error updating destination:", error);
+            alert("An error occurred while updating the destination.");
+        }
+    };
 
-    //     const res = await fetch("http://localhost:5000/destination",{
-    //         method: 'POST',
-    //         headers: {
-    //             'content-type': 'application/json'
-    //         },
-    //         body: JSON.stringify(destination)
-    // })
-    //     const data = await res.json()
-    //     console.log(data);
-    }
     return (
         <div>
-            <Modal>
-                <Button variant="secondary">Open Contact Form</Button>
+            <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
+                <Modal.Trigger>
+                    <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition cursor-pointer">
+                        <FiEdit2 size={14} />
+                        <span className="text-sm font-medium">Edit</span>
+                    </button>
+                </Modal.Trigger>
                 <Modal.Backdrop>
                     <Modal.Container placement="auto">
-                        <Modal.Dialog className="sm:max-w-md">
+                        <Modal.Dialog className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
                             <Modal.CloseTrigger />
                             <Modal.Header>
                                 <Modal.Icon className="bg-accent-soft text-accent-soft-foreground">
-                                    <Envelope className="size-5" />
+                                    <FiMail className="size-5" />
                                 </Modal.Icon>
-                                <Modal.Heading>Contact Us</Modal.Heading>
-                                
+                                <Modal.Heading>Edit Destination</Modal.Heading>
                             </Modal.Header>
                             <Modal.Body className="p-6">
                                 <Surface variant="default">
-                                    <form onSubmit={onSubmit}
-                                        className="p-10 space-y-8 w-3xl"
-                                    >
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <form onSubmit={onSubmit} className="p-2 space-y-6 w-full">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             {/* Destination Name */}
                                             <div className="md:col-span-2">
-                                                <TextField name="destinationName" isRequired>
+                                                <TextField name="destinationName" isRequired defaultValue={destinationName}>
                                                     <Label>Destination Name</Label>
-                                                    <Input placeholder="Bali Paradise" className="rounded-2xl" />
+                                                    <Input className="rounded-2xl" />
                                                     <FieldError />
                                                 </TextField>
                                             </div>
 
                                             {/* Country */}
-                                            <TextField name="country" isRequired>
-                                                <Label>Country</Label>
-                                                <Input placeholder="Indonesia" className="rounded-2xl" />
-                                                <FieldError />
-                                            </TextField>
+                                            <div>
+                                                <TextField name="country" isRequired defaultValue={country}>
+                                                    <Label>Country</Label>
+                                                    <Input className="rounded-2xl" />
+                                                    <FieldError />
+                                                </TextField>
+                                            </div>
 
-                                            {/* Category - Updated Select Component */}
+                                            {/* Category */}
                                             <div>
                                                 <Select
                                                     name="category"
                                                     isRequired
                                                     className="w-full"
-                                                    placeholder="Select category"
+                                                    defaultSelectedKey={category}
                                                 >
                                                     <Label>Category</Label>
                                                     <Select.Trigger className="rounded-2xl">
@@ -102,71 +125,57 @@ const EditeModals = () => {
                                             </div>
 
                                             {/* Price */}
-                                            <TextField name="price" type="number" isRequired>
-                                                <Label>Price (USD)</Label>
-                                                <Input
-                                                    type="number"
-                                                    placeholder="1299"
-                                                    className="rounded-2xl"
-                                                />
-                                                <FieldError />
-                                            </TextField>
+                                            <div>
+                                                <TextField name="price" type="number" isRequired defaultValue={price}>
+                                                    <Label>Price (USD)</Label>
+                                                    <Input type="number" className="rounded-2xl" />
+                                                    <FieldError />
+                                                </TextField>
+                                            </div>
 
                                             {/* Duration */}
-                                            <TextField name="duration" isRequired>
-                                                <Label>Duration</Label>
-                                                <Input
-                                                    placeholder="7 Days / 6 Nights"
-                                                    className="rounded-2xl"
-                                                />
-                                                <FieldError />
-                                            </TextField>
+                                            <div>
+                                                <TextField name="duration" isRequired defaultValue={duration}>
+                                                    <Label>Duration</Label>
+                                                    <Input className="rounded-2xl" />
+                                                    <FieldError />
+                                                </TextField>
+                                            </div>
 
                                             {/* Departure Date */}
                                             <div className="md:col-span-2">
-                                                <TextField name="departureDate" type="date" isRequired>
+                                                <TextField name="departureDate" type="date" isRequired defaultValue={departureDate}>
                                                     <Label>Departure Date</Label>
                                                     <Input type="date" className="rounded-2xl" />
                                                     <FieldError />
                                                 </TextField>
                                             </div>
 
-                                            {/* Image URL - Removed preview */}
+                                            {/* Image URL */}
                                             <div className="md:col-span-2">
-                                                <TextField name="imageUrl" isRequired>
+                                                <TextField name="imageUrl" isRequired defaultValue={imageUrl}>
                                                     <Label>Image URL</Label>
-                                                    <Input
-                                                        type="url"
-                                                        placeholder="https://example.com/bali-paradise.jpg"
-                                                        className="rounded-2xl"
-                                                    />
+                                                    <Input type="url" className="rounded-2xl" />
                                                     <FieldError />
                                                 </TextField>
                                             </div>
 
                                             {/* Description */}
                                             <div className="md:col-span-2">
-                                                <TextField name="description" isRequired>
+                                                <TextField name="description" isRequired defaultValue={description}>
                                                     <Label>Description</Label>
-                                                    <TextArea
-                                                        placeholder="Describe the travel experience..."
-                                                        className="rounded-3xl"
-                                                    />
+                                                    <TextArea className="rounded-3xl" />
                                                     <FieldError />
                                                 </TextField>
                                             </div>
                                         </div>
 
-                                        {/* Buttons */}
-
                                         <Button
                                             type="submit"
                                             variant="outline"
-                                            // isLoading={isPending}
-                                            className=" rounded-none w-full bg-cyan-500 text-white"
+                                            className="rounded-none w-full bg-cyan-500 text-white cursor-pointer"
                                         >
-                                            {/* {isPending ? "Adding Package..." : "Add Travel Package"} */}
-                                            Add Travel Package
+                                            Save Changes
                                         </Button>
                                     </form>
                                 </Surface>
@@ -175,7 +184,6 @@ const EditeModals = () => {
                                 <Button slot="close" variant="secondary">
                                     Cancel
                                 </Button>
-                                <Button slot="close">Send Message</Button>
                             </Modal.Footer>
                         </Modal.Dialog>
                     </Modal.Container>
