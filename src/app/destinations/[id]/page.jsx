@@ -17,7 +17,6 @@ const destinationDetailsPage = async ({ params }) => {
 
     return (
         <div>
-
             <div className="min-h-screen bg-white text-gray-800 font-sans pb-12">
                 {/* Container */}
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
@@ -25,10 +24,10 @@ const destinationDetailsPage = async ({ params }) => {
                     {/* Header Section */}
                     <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
                         <Link href='/destinations'>
-                        <button  className="flex items-center text-gray-500 hover:text-gray-800 transition mb-4 sm:mb-0">
-                            <FiArrowLeft className="mr-2" />
-                            <span>Back to Destinations</span>
-                        </button>
+                            <button className="flex items-center text-gray-500 hover:text-gray-800 transition mb-4 sm:mb-0">
+                                <FiArrowLeft className="mr-2" />
+                                <span>Back to Destinations</span>
+                            </button>
                         </Link>
 
                         <div className="flex items-center gap-3">
