@@ -4,6 +4,7 @@ import { BiCheck } from 'react-icons/bi';
 import { FaStar } from 'react-icons/fa';
 import { FiArrowLeft, FiArrowRight, FiCalendar, FiEdit2, FiMapPin, FiTrash2 } from 'react-icons/fi';
 import EditeModals from '@/component/EditeModals';
+import { DeleteAlert } from '@/component/DeleteAlert';
 
 const destinationDetailsPage = async ({ params }) => {
     const { id } = await params;
@@ -13,7 +14,32 @@ const destinationDetailsPage = async ({ params }) => {
     const destination = await res.json();
     console.log(destination);
 
-    const { price, duration, country, destinationName, imageUrl, _id } = destination;
+    const { price, duration, country, destinationName, imageUrl, _id, category, departureDate } = destination;
+
+    // Helper function to format departureDate to YYYY-MM-DD for the HTML date input
+    const formatDateToYYYYMMDD = (dateStr) => {
+        if (!dateStr) return "";
+        // If it's already YYYY-MM-DD
+        if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+            return dateStr;
+        }
+        // If it's DD-MM-YYYY
+        if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) {
+            const [day, month, year] = dateStr.split('-');
+            return `${year}-${month}-${day}`;
+        }
+        // If it's DD/MM/YYYY
+        if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) {
+            const [day, month, year] = dateStr.split('/');
+            return `${year}-${month}-${day}`;
+        }
+        // If it's YYYY/MM/DD
+        if (/^\d{4}\/\d{2}\/\d{2}$/.test(dateStr)) {
+            return dateStr.replace(/\//g, '-');
+        }
+        return dateStr;
+    };
+    const formattedDepartureDate = formatDateToYYYYMMDD(departureDate);
 
     return (
         <div>
@@ -32,10 +58,11 @@ const destinationDetailsPage = async ({ params }) => {
 
                         <div className="flex items-center gap-3">
                             <EditeModals destination={destination} />
-                            <button className="flex items-center gap-2 px-4 py-2 border border-red-200 text-red-500 rounded-md hover:bg-red-50 transition">
+                            <DeleteAlert destination={destination} />
+                            {/* <button className="flex items-center gap-2 px-4 py-2 border border-red-200 text-red-500 rounded-md hover:bg-red-50 transition">
                                 <FiTrash2 size={14} />
                                 <span className="text-sm font-medium">Cancel</span>
-                            </button>
+                            </button> */}
                         </div>
                     </div>
 
@@ -55,9 +82,16 @@ const destinationDetailsPage = async ({ params }) => {
                         <div className="lg:col-span-2">
                             {/* Title Area */}
                             <div className="mb-8">
-                                <div className="flex items-center text-gray-500 text-sm mb-2">
-                                    <FiMapPin className="mr-1" />
-                                    <span>{country}</span>
+                                <div className="flex flex-wrap items-center gap-3 text-gray-500 text-sm mb-2">
+                                    <div className="flex items-center">
+                                        <FiMapPin className="mr-1" />
+                                        <span>{country}</span>
+                                    </div>
+                                    {category && (
+                                        <span className="bg-blue-50 text-[#1CA4C0] px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider border border-blue-100">
+                                            {category}
+                                        </span>
+                                    )}
                                 </div>
                                 <h1 className="text-4xl font-light mb-4">{destinationName}</h1>
 
@@ -68,8 +102,14 @@ const destinationDetailsPage = async ({ params }) => {
                                     </div>
                                     <div className="flex items-center gap-1">
                                         <FiCalendar className="text-gray-600" />
-                                        <span>{duration}</span>
+                                        <span>Duration: {duration}</span>
                                     </div>
+                                    {departureDate && (
+                                        <div className="flex items-center gap-1">
+                                            <FiCalendar className="text-gray-600" />
+                                            <span>Departure: {departureDate}</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -117,7 +157,7 @@ const destinationDetailsPage = async ({ params }) => {
                                 <div className="mb-4">
                                     <input
                                         type="date"
-                                        defaultValue="2026-05-15"
+                                        defaultValue={formattedDepartureDate}
                                         className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-md text-gray-700 outline-none focus:border-[#1CA4C0] transition"
                                     />
                                 </div>

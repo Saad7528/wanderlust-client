@@ -9,13 +9,39 @@ const EditeModals = ({ destination }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const { _id, destinationName, country, category, price, duration, departureDate, imageUrl, description } = destination || {};
+    console.log(category);
+
+    // Helper function to format departureDate to YYYY-MM-DD for the HTML date input
+    const formatDateToYYYYMMDD = (dateStr) => {
+        if (!dateStr) return "";
+        // If it's already YYYY-MM-DD
+        if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+            return dateStr;
+        }
+        // If it's DD-MM-YYYY
+        if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) {
+            const [day, month, year] = dateStr.split('-');
+            return `${year}-${month}-${day}`;
+        }
+        // If it's DD/MM/YYYY
+        if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) {
+            const [day, month, year] = dateStr.split('/');
+            return `${year}-${month}-${day}`;
+        }
+        // If it's YYYY/MM/DD
+        if (/^\d{4}\/\d{2}\/\d{2}$/.test(dateStr)) {
+            return dateStr.replace(/\//g, '-');
+        }
+        return dateStr;
+    };
+    const formattedDepartureDate = formatDateToYYYYMMDD(departureDate);
 
     const onSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        const updatedDestination = Object.fromEntries(formData.entries()); 
+        const updatedDestination = Object.fromEntries(formData.entries());
         updatedDestination.price = Number(updatedDestination.price);
-        
+
         try {
             const res = await fetch(`http://localhost:5000/destination/${_id}`, {
                 method: 'PUT',
@@ -53,9 +79,9 @@ const EditeModals = ({ destination }) => {
                         <Modal.Dialog className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
                             <Modal.CloseTrigger />
                             <Modal.Header>
-                                <Modal.Icon className="bg-accent-soft text-accent-soft-foreground">
+                                {/* <Modal.Icon className="bg-accent-soft text-accent-soft-foreground">
                                     <FiMail className="size-5" />
-                                </Modal.Icon>
+                                </Modal.Icon> */}
                                 <Modal.Heading>Edit Destination</Modal.Heading>
                             </Modal.Header>
                             <Modal.Body className="p-6">
@@ -119,6 +145,18 @@ const EditeModals = ({ destination }) => {
                                                                 Luxury
                                                                 <ListBox.ItemIndicator />
                                                             </ListBox.Item>
+                                                            <ListBox.Item id="Wildlife" textValue="Wildlife">
+                                                                Wildlife
+                                                                <ListBox.ItemIndicator />
+                                                            </ListBox.Item>
+                                                            <ListBox.Item id="Romantic" textValue="Romantic">
+                                                                Romantic
+                                                                <ListBox.ItemIndicator />
+                                                            </ListBox.Item>
+                                                            <ListBox.Item id="Historical" textValue="Historical">
+                                                                Historical
+                                                                <ListBox.ItemIndicator />
+                                                            </ListBox.Item>
                                                         </ListBox>
                                                     </Select.Popover>
                                                 </Select>
@@ -144,7 +182,7 @@ const EditeModals = ({ destination }) => {
 
                                             {/* Departure Date */}
                                             <div className="md:col-span-2">
-                                                <TextField name="departureDate" type="date" isRequired defaultValue={departureDate}>
+                                                <TextField name="departureDate" type="date" isRequired defaultValue={formattedDepartureDate}>
                                                     <Label>Departure Date</Label>
                                                     <Input type="date" className="rounded-2xl" />
                                                     <FieldError />

@@ -82,6 +82,18 @@ const addDestinationPage = () => {
                                             Luxury
                                             <ListBox.ItemIndicator />
                                         </ListBox.Item>
+                                        <ListBox.Item id="Wildlife" textValue="Wildlife">
+                                            Wildlife
+                                            <ListBox.ItemIndicator />
+                                        </ListBox.Item>
+                                        <ListBox.Item id="Romantic" textValue="Romantic">
+                                            Romantic
+                                            <ListBox.ItemIndicator />
+                                        </ListBox.Item>
+                                        <ListBox.Item id="Historical" textValue="Historical">
+                                            Historical
+                                            <ListBox.ItemIndicator />
+                                        </ListBox.Item>
                                     </ListBox>
                                 </Select.Popover>
                             </Select>
